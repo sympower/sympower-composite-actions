@@ -82,9 +82,7 @@ runs:
               https://api.github.com/repos/sympower/environments/dispatches
           
             echo "Done: $DISPATCH_EVENT"
-  
-          else
-            
+        
           fi
         
         done
