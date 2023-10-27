@@ -29,7 +29,7 @@ runs:
       run: |
         set -ue
         
-        IMAGE_NAME='${{ inputs.default-name }}'
+        DEFAULT_NAME='${{ inputs.default-name }}'
         VERSION='${{ inputs.version }}'
         INCLUDE_GROUP='${{ inputs.deploy-group }}'
         
@@ -46,11 +46,11 @@ runs:
           fi
       
           if [ -z "$COMPONENT" ] || [ "$COMPONENT" = "null" ] ; then
-            COMPONENT="$REPOSITORY_NAME"
+            COMPONENT="$DEFAULT_NAME"
           fi
       
           if [ -z "$SERVICE" ]|| [ "$SERVICE" = "null" ] ; then
-            SERVICE="$REPOSITORY_NAME"
+            SERVICE="$DEFAULT_NAME"
           fi
         
           if [ -z "$DEPLOY_GROUP" ] || [ "$DEPLOY_GROUP" = "null" ] ; then
@@ -59,7 +59,7 @@ runs:
         
           if [ "$DEPLOY_GROUP" = "$INCLUDE_GROUP" ] ; then
           
-            DISPATCH_EVENT="$REPOSITORY_NAME calls update version to $VERSION for $COMPONENT/$SERVICE in $ENVIRONMENT"
+            DISPATCH_EVENT="${{ github.repository }} calls update version to $VERSION for $COMPONENT/$SERVICE in $ENVIRONMENT"
           
             BODY='{
               "event_type": "update_version_event",
