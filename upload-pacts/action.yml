@@ -11,7 +11,7 @@ runs:
       shell: bash
       run: |
         set -ue ;
-        for PACT_DIR in $( find . | grep build/pacts$ | sed 's/^.\///' ) ; do
+        for PACT_DIR in $( find . -type f | grep build/pacts | grep \.json$ | xargs dirname | uniq | sed 's/^.\///' ) ; do
           echo "Uploading pacts in: ${PACT_DIR}"
           docker run --rm \
            -w ${PWD} \
