@@ -4,7 +4,6 @@ inputs:
   secrets:
     description: 'Secrets required for the build'
     required: true
-    default: '{}'
   version:
     description: 'Version number of the image released to ECR'
     required: true
@@ -30,7 +29,7 @@ runs:
       run: |
         set -ue
         
-        IMAGE_NAME='${{ inputs.repository-name }}'
+        IMAGE_NAME='${{ inputs.default-name }}'
         VERSION='${{ inputs.version }}'
         INCLUDE_GROUP='${{ inputs.deploy-group }}'
         
