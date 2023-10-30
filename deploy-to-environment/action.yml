@@ -16,10 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-      with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting
-        fetch-depth: 0
+    # Ensure that the repository is checked out for jobs that don't have setup-build-environment step before
     - uses: actions/checkout@v4
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
