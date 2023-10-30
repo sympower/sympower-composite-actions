@@ -10,7 +10,6 @@ inputs:
   secrets:
     description: 'Secrets required for the build'
     required: true
-    default: '{}'
   schema-module:
     description: 'Gradle module ťo check for schema file changes'
     default: 'schema'
