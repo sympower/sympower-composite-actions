@@ -21,7 +21,7 @@ runs:
         set -eu
         
         IS_RELEASE_STYLE='${{ inputs.style-as-release }}'
-        echo "repository-name="$(echo '${{ github.repository }}' | awk -F '/' '{print $2}') >> $GITHUB_ENV
+        echo "repository-name="$(echo '${{ github.repository }}' | awk -F '/' '{print $2}') >> $GITHUB_OUTPUT ;
         
         if [ "$IS_RELEASE_STYLE" = "true" ] ; then
           currentDate=$(date +"%Y.%m.%d.%H.%M") ;
