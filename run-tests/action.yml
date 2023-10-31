@@ -18,7 +18,7 @@ runs:
         fi
 
     - name: Unit test report
-      if: env.TEST_RESULTS_EXIST
+      if: env.TEST_RESULTS_EXIST == 'true'
       uses: phoenix-actions/test-reporting@v12
       continue-on-error: true
       env:
@@ -47,7 +47,7 @@ runs:
         fi
 
     - name: Behaviour test report
-      if: env.BEHAVIOUR_TEST_RESULTS_EXIST
+      if: env.BEHAVIOUR_TEST_RESULTS_EXIST == 'true'
       uses: phoenix-actions/test-reporting@v12
       continue-on-error: true
       env:
@@ -75,7 +75,7 @@ runs:
         fi
 
     - name: Integration test report
-      if: env.INTEGRATION_TEST_RESULTS_EXIST
+      if: env.INTEGRATION_TEST_RESULTS_EXIST == 'true'
       uses: phoenix-actions/test-reporting@v12
       continue-on-error: true
       env:
