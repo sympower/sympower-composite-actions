@@ -8,9 +8,6 @@ outputs:
   version:
     description: Version number of the image released to ECR
     value: ${{ steps.format-version.outputs.version }}
-  repository-name:
-    description: Repository name
-    value: ${{ steps.format-version.outputs.repository-name }}
 runs:
   using: "composite"
   steps:
@@ -21,7 +18,6 @@ runs:
         set -eu
         
         IS_RELEASE_STYLE='${{ inputs.style-as-release }}'
-        echo "repository-name="$(echo '${{ github.repository }}' | awk -F '/' '{print $2}') >> $GITHUB_OUTPUT ;
         
         if [ "$IS_RELEASE_STYLE" = "true" ] ; then
           currentDate=$(date +"%Y.%m.%d.%H.%M") ;

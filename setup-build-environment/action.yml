@@ -55,7 +55,6 @@ runs:
         echo 'registryHost=${{ fromJSON(inputs.secrets).DOCKER_REGISTRY_HOST }}' >> "$CONF_FILE"
         
         ## Configure environment variables
-        echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
         echo PACT_BROKER_BASE_URL=${{ fromJSON(inputs.secrets).PACT_BROKER_BASE_URL }} >> $GITHUB_ENV
         echo PACT_BROKER_USERNAME=${{ fromJSON(inputs.secrets).PACT_BROKER_USERNAME }}  >> $GITHUB_ENV
         echo PACT_BROKER_PASSWORD=${{ fromJSON(inputs.secrets).PACT_BROKER_PASSWORD }}  >> $GITHUB_ENV
