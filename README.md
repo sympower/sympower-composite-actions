@@ -62,7 +62,8 @@ jobs:
 
 ### run-tests
 
-`run-tests` action executes Gradle `test`, `behaviourTest` and `integrationTest` tasks in this order. It will execute 
+`run-tests` action executes Gradle `test`, `behaviourTest` and `integrationTest` tasks in this order. It is not 
+necessary for the repository to have tests in all those test-sets. It will execute 
 [phoenix-actions/test-reporting](https://github.com/phoenix-actions/test-reporting) action for those tests that have
 test output files to report.
 
@@ -110,7 +111,7 @@ jobs:
         uses: sympower/sympower-composite-actions/run-tests@{LATEST_VERSION}
       - id: code-analysis
         name: "Code analysis"
-        uses: sympower/sympower-composite-actions/code-analysis@v2023.10.30.15.12-299ab4a
+        uses: sympower/sympower-composite-actions/code-analysis@{LATEST_VERSION}
         with:
           secrets: ${{ env.secrets }}
 ```
@@ -118,7 +119,7 @@ jobs:
 ### build-and-upload-docker-image
 
 `build-and-upload-docker-image` action uses jib Gradle plugin to build and upload a multi-arch Docker image of the 
-Java application(s) present int the repo to ECR. 
+Java application(s) present into the repo to ECR. 
 
 `format-version` action can be used to format the repo version for this action, but it is not required as you can choose 
 to use any version you want as the input. 
@@ -155,7 +156,8 @@ jobs:
 
 `upload-schema` action detects if there are any file changes in the schema module. Directory named `schema` is checked
 by default, however this can be overridden by providing a different directory name as `schema-module` input for this
-action. If changes are detected then runs Gradle publish command to ensure schema artifact is published to Nexus.
+action. If changes are detected then runs Gradle publish command to ensure schema artifact is published to Nexus and
+schema version badge gist is updated. 
 
 `format-version` action can be used to format the repo version for this action, but it is not required as you can choose 
 to use any version you want as the input.
@@ -226,7 +228,7 @@ jobs:
       - id: run-tests
         name: "Run tests"
         uses: sympower/sympower-composite-actions/run-tests@{LATEST_VERSION}
-      # end-of-pact-source-example
+      # End of example of an action that might produce Pact contracts    
         
       - id: upload-pacts
         name: "Upload pacts"
@@ -254,7 +256,7 @@ Auto-deploy environment JSON file fields:
   input is used. In most cases repository name is matches the component name and is also inputted as `default-name`.
 * `service` **optional** - Declares the name of service to deploy. Corresponds to the service name in `main.yml` 
   declaration chosen by `component` field in this file. If not declared then value from `default-name` input is used. 
-  In most cases repository name is matches the service name and is also inputted as `default-name`.
+  In most cases repository name matches the service name and is also inputted as `default-name`.
 
 In most cases `auto-deploy/*.env.json` files can be only include environment:
 * Staging:
@@ -346,7 +348,7 @@ jobs:
       - id: run-tests
         name: "Run tests"
         uses: sympower/sympower-composite-actions/run-tests@{LATEST_VERSION}
-      # end-of-report-source-example
+      # End of example of an action that might produce Pact contracts
       
       - id: upload-build-artifacts
         name: "Upload build artifacts"
