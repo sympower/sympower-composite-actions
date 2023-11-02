@@ -7,9 +7,9 @@ inputs:
   version:
     description: 'Version number of the image released to ECR'
     required: true
-  default-name:
-    description: 'Default service and component name to use when not specified in the auto-deployment file'
-    required: true
+  fallback-name:
+    description: 'Fallback service and component name to use when not specified in the auto-deployment file. If not declared then repository name is used instead.'
+    required: false
   deploy-group:
     description: 'Will include auto-deploys with matching "deployGroup". If "deployGroup" is not defined for auto-deploy configuration then environment name is matched instead.'
     required: true
@@ -31,9 +31,15 @@ runs:
       run: |
         set -ue
         
-        DEFAULT_NAME='${{ inputs.default-name }}'
+        REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
+        
+        FALLBACK_NAME='${{ inputs.fallback-name }}'
         VERSION='${{ inputs.version }}'
         INCLUDE_GROUP='${{ inputs.deploy-group }}'
+        
+        if [ -z "$FALLBACK_NAME" ] ; then
+          FALLBACK_NAME="$REPOSITORY_NAME"
+        fi
         
         for env in $( ls auto-deploy/*.env.json ) ; do
         
@@ -48,11 +54,11 @@ runs:
           fi
       
           if [ -z "$COMPONENT" ] || [ "$COMPONENT" = "null" ] ; then
-            COMPONENT="$DEFAULT_NAME"
+            COMPONENT="$FALLBACK_NAME"
           fi
       
           if [ -z "$SERVICE" ]|| [ "$SERVICE" = "null" ] ; then
-            SERVICE="$DEFAULT_NAME"
+            SERVICE="$FALLBACK_NAME"
           fi
         
           if [ -z "$DEPLOY_GROUP" ] || [ "$DEPLOY_GROUP" = "null" ] ; then

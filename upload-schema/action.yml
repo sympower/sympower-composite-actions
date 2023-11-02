@@ -44,6 +44,9 @@ runs:
         ./gradlew publish --parallel --continue --stacktrace \
           -Ptag=${{ inputs.version }}
 
+    - run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+      shell: bash
+
     - name: Update Schema Version Badge
       if:
         env.HAS_SCHEMA == 'true'
