@@ -13,8 +13,7 @@ documented here that the action is self-contained and does not need this action.
 This action:
 * checks out the repository,
 * configures Gradle and credentials for it,
-* configures AWS credentials and logs in to ECR,
-* populates `env.REPOSITORY_NAME` environment variable.
+* configures AWS credentials and logs in to ECR.
 
 Required inputs for this GitHub actions:
 * `secrets` - JSON string of the GitHub secrets.
@@ -252,11 +251,11 @@ Auto-deploy environment JSON file fields:
   determine if the action should include this `auto-deploy` file in the deployment call.
 * `component` **optional** - Declares the component to deploy into. This declares the EC2 instance where the service is 
   running in, and it corresponds to the folder name where `main.yml` declaration containing the service in the
-  [environments](https://github.com/sympower/environments) repository. If not declared then value from `default-name` 
-  input is used. In most cases repository name is matches the component name and is also inputted as `default-name`.
+  [environments](https://github.com/sympower/environments) repository. If not declared then value from `fallback-name` 
+  input is used. In most cases repository name is matches the component name and is also inputted as `fallback-name`.
 * `service` **optional** - Declares the name of service to deploy. Corresponds to the service name in `main.yml` 
-  declaration chosen by `component` field in this file. If not declared then value from `default-name` input is used. 
-  In most cases repository name matches the service name and is also inputted as `default-name`.
+  declaration chosen by `component` field in this file. If not declared then value from `fallback-name` input is used. 
+  In most cases repository name matches the service name and is also inputted as `fallback-name`.
 
 In most cases `auto-deploy/*.env.json` files can be only include environment:
 * Staging:
@@ -287,9 +286,9 @@ to use any version you want as the input.
 Required inputs for this GitHub actions:
 * `version` - Version to use when calling deployment.
 * `secrets` - JSON string of the GitHub secrets.
-* `default-name` - Default name to use for `component` and `service` fields in `auto-deploy` JSON files if either of 
-  those are missing.
-* `deploy-group` - Deployment group name to use when calling deployment to choose which 
+* `fallback-name` **optional** - Fallback name to use for `component` and `service` fields in `auto-deploy` JSON files if either of 
+  those are missing. If not declared then repository name is used as the fallback name.
+* `deploy-group` - Deployment group name to use when calling deployment to choose which.
 
 Example of usage:
 ```yaml
@@ -320,7 +319,6 @@ jobs:
         with:
           secrets: ${{ env.secrets }}
           version: ${{ steps.format-version.outputs.version }}
-          default-name: ${{ env.REPOSITORY_NAME }}
           deploy-group: platform
 ```
 
