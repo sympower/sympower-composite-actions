@@ -253,11 +253,10 @@ Auto-deploy environment JSON file fields:
   running in, and it corresponds to the folder name where `main.yml` declaration containing the service in the
   [environments](https://github.com/sympower/environments) repository. If not declared then value from `fallback-name` 
   input is used. In most cases repository name is matches the component name and is also inputted as `fallback-name`.
-* `service` **optional** - Declares the name of service to deploy. Corresponds to the service name in `main.yml` 
+* `service` **optional** - Declares the name of the service to deploy. Corresponds to the service name in `main.yml` 
   declaration chosen by `component` field in this file. If not declared then value from `fallback-name` input is used. 
-  In most cases repository name matches the service name and is also inputted as `fallback-name`.
 
-In most cases `auto-deploy/*.env.json` files can be only include environment:
+In most cases `auto-deploy/*.env.json` files can just include environment:
 * Staging:
 ```json
 {
