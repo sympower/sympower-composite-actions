@@ -1,0 +1,46 @@
+name: 'System test'
+description: 'Run a system test'
+inputs:
+  test-to-trigger:
+    description: 'Which test to trigger, e.g., system-activation'
+    required: true
+  service-name:
+    description: 'Name of the Docker image of the service to run the test for'
+    required: true
+  service-version:
+    description: 'Version of the Docker image of the service to run the test for'
+    required: true
+  comment-downstream-url:
+    description: 'Downstream url where to the trigger will add a comment with a link to the started workflow'
+    required: false
+  target-environment:
+    description: 'Which environment to take version for other services, i.e., staging or production'
+    required: false
+    default: 'staging'
+  secrets:
+    description: 'Secrets required for the build'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: tibdex/github-app-token@v2
+      id: generate-token
+      with:
+        app_id: ${{ fromJSON(inputs.secrets).TEST_TRIGGER_APP_ID }}
+        private_key: ${{ fromJSON(inputs.secrets).TEST_TRIGGER_APP_KEY }}
+
+    - uses: convictional/trigger-workflow-and-wait@v1.6.5
+      with:
+        owner: sympower
+        repo: activating-flexibility-tests
+        ref: main
+        workflow_file_name: remote-test-trigger.yml
+        client_payload: >-
+          { 
+            "origin": "${{ inputs.service-name }}", 
+            "test-to-trigger": "${{ inputs.test-to-trigger }}", 
+            "target-environment": "${{ inputs.target-environment }}", 
+            "${{ inputs.service-name }}-version": "${{ inputs.service-version }}" 
+          }
+        github_token: ${{ steps.generate-token.outputs.token }}
+        comment_downstream_url: ${{ inputs.comment-downstream-url }}
