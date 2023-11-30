@@ -57,5 +57,5 @@ runs:
         gistID: ${{ inputs.gistID }}
         filename: ${{ env.REPOSITORY_NAME }}-schema.json
         label: Schema Version
-        message: ${{ env.VERSION }}
+        message: ${{ inputs.version }}
         color: orange
