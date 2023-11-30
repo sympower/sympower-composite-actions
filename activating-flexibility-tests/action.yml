@@ -1,5 +1,5 @@
-name: 'System test'
-description: 'Run a system test'
+name: 'Activating flexibility test'
+description: 'Run a system test in activating-flexibility-tests'
 inputs:
   test-to-trigger:
     description: 'Which test to trigger, e.g., system-activation'
