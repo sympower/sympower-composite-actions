@@ -25,6 +25,6 @@ runs:
           echo "version=$(echo $currentDate-$tag)" >> $GITHUB_OUTPUT ;
         else
           REF_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}
-          tag=$(echo ${REF_NAME} | cut -c 1-20 | tr / -) ;
+          tag=$(echo ${REF_NAME} | cut -c 1-20 | tr / -)-SNAPSHOT ;
           echo "version=$(echo $tag)" >> $GITHUB_OUTPUT ;
         fi
