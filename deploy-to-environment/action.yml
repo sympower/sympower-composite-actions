@@ -13,6 +13,10 @@ inputs:
   deploy-group:
     description: 'Will include auto-deploys with matching "deployGroup". If "deployGroup" is not defined for auto-deploy configuration then environment name is matched instead.'
     required: true
+  require-approval:
+    description: 'If set to true then the deployment will require approval before it can be deployed'
+    required: false
+    default: "false"
 runs:
   using: "composite"
   steps:
@@ -36,6 +40,7 @@ runs:
         FALLBACK_NAME='${{ inputs.fallback-name }}'
         VERSION='${{ inputs.version }}'
         INCLUDE_GROUP='${{ inputs.deploy-group }}'
+        REQUIRE_APPROVAL='${{ inputs.require-approval }}'
         
         if [ -z "$FALLBACK_NAME" ] ; then
           FALLBACK_NAME="$REPOSITORY_NAME"
@@ -76,7 +81,8 @@ runs:
                 "environment": "'"$ENVIRONMENT"'",
                 "component": "'"$COMPONENT"'",
                 "service": "'"$SERVICE"'",
-                "version": "'"$VERSION"'"
+                "version": "'"$VERSION"'",
+                "require_approval": "'"$REQUIRE_APPROVAL"'"
               }
             }'
           
