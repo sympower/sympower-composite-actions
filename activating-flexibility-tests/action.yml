@@ -7,6 +7,9 @@ inputs:
   service-name:
     description: 'Name of the Docker image of the service to run the test for'
     required: true
+  branch-name:
+    description: 'Name of the branch from where the test was triggered'
+    required: false
   service-version:
     description: 'Version of the Docker image of the service to run the test for'
     required: true
@@ -37,7 +40,7 @@ runs:
         workflow_file_name: remote-test-trigger.yml
         client_payload: >-
           { 
-            "origin": "${{ inputs.service-name }}", 
+            "origin": "${{ inputs.service-name }}:${{ inputs.branch-name }}", 
             "test-to-trigger": "${{ inputs.test-to-trigger }}", 
             "target-environment": "${{ inputs.target-environment }}", 
             "${{ inputs.service-name }}-version": "${{ inputs.service-version }}" 
