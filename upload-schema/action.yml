@@ -51,7 +51,7 @@ runs:
       if:
         env.HAS_SCHEMA == 'true'
         && steps.schema-files.outputs.any_modified == 'true'
-      uses: schneegans/dynamic-badges-action@v1.6.0
+      uses: schneegans/dynamic-badges-action@v1.7.0
       with:
         auth: ${{ fromJSON(inputs.secrets).GIST_SECRET }}
         gistID: ${{ inputs.gistID }}
