@@ -4,15 +4,14 @@ inputs:
   test-to-trigger:
     description: 'Which test to trigger, e.g., system-activation'
     required: true
-  service-name:
-    description: 'Name of the Docker image of the service to run the test for'
-    required: true
   branch-name:
     description: 'Name of the branch from where the test was triggered'
     required: false
-  service-version:
-    description: 'Version of the Docker image of the service to run the test for'
-    required: true
+  service-versions:
+    description: 'Versions of the Docker image of the services to run the test for'
+    type: string
+    default: '{}'
+    required: false
   comment-downstream-url:
     description: 'Downstream url where to the trigger will add a comment with a link to the started workflow'
     required: false
@@ -43,7 +42,7 @@ runs:
             "origin": "${{ inputs.service-name }}:${{ inputs.branch-name }}", 
             "test-to-trigger": "${{ inputs.test-to-trigger }}", 
             "target-environment": "${{ inputs.target-environment }}", 
-            "${{ inputs.service-name }}-version": "${{ inputs.service-version }}" 
+            "service-versions": ${{ toJson(inputs.service-version) }} 
           }
         github_token: ${{ steps.generate-token.outputs.token }}
         comment_downstream_url: ${{ inputs.comment-downstream-url }}
