@@ -44,7 +44,7 @@ runs:
             "test-to-trigger": "${{ inputs.test-to-trigger }}", 
             "target-environment": "${{ inputs.target-environment }}", 
             "service-versions" : "{ 
-                \"${{ inputs.service-name }}\": \"${{ inputs.service-version }}\" 
+                \\"${{ inputs.service-name }}\\": \\"${{ inputs.service-version }}\\" 
             }"
           }
         github_token: ${{ steps.generate-token.outputs.token }}
