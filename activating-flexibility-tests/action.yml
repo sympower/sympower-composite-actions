@@ -41,6 +41,7 @@ runs:
         client_payload: >-
           { 
             "origin": "${{ inputs.service-name }}:${{ inputs.branch-name }}", 
+            "origin-workflow" : "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             "test-to-trigger": "${{ inputs.test-to-trigger }}", 
             "target-environment": "${{ inputs.target-environment }}", 
             "service-versions" : "{ \"${{ inputs.service-name }}\": \"${{ inputs.service-version }}\" }"
