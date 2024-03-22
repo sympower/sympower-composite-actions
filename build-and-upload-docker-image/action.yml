@@ -13,4 +13,5 @@ runs:
         set -ue ;
         ./gradlew jib --parallel --continue --stacktrace \
           -Ptag=${{ inputs.version }} \
+          -PregistryHost=815554367290.dkr.ecr.eu-central-1.amazonaws.com \
           -Djib.from.platforms=linux/amd64,linux/arm64
