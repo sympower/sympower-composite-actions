@@ -19,7 +19,7 @@ runs:
 
     - name: Unit test report
       if: env.TEST_RESULTS_EXIST == 'true'
-      uses: phoenix-actions/test-reporting@v12
+      uses: phoenix-actions/test-reporting@v13
       continue-on-error: true
       env:
         NODE_OPTIONS: --max-old-space-size=4096
@@ -48,7 +48,7 @@ runs:
 
     - name: Behaviour test report
       if: env.BEHAVIOUR_TEST_RESULTS_EXIST == 'true'
-      uses: phoenix-actions/test-reporting@v12
+      uses: phoenix-actions/test-reporting@v13
       continue-on-error: true
       env:
         NODE_OPTIONS: --max-old-space-size=4096
@@ -76,7 +76,7 @@ runs:
 
     - name: Integration test report
       if: env.INTEGRATION_TEST_RESULTS_EXIST == 'true'
-      uses: phoenix-actions/test-reporting@v12
+      uses: phoenix-actions/test-reporting@v13
       continue-on-error: true
       env:
         NODE_OPTIONS: --max-old-space-size=4096
