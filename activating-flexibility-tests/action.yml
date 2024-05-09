@@ -47,4 +47,3 @@ runs:
             "service-versions" : "{ \"${{ inputs.service-name }}\": \"${{ inputs.service-version }}\" }"
           }
         github_token: ${{ steps.generate-token.outputs.token }}
-        comment_downstream_url: ${{ inputs.comment-downstream-url }}
