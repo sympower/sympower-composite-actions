@@ -1,0 +1,42 @@
+name: 'Vulnerabilities Scan'
+description: 'Scan for vulnerabilities in dependencies'
+inputs:
+  secrets:
+    description: 'Secrets required for the build'
+    required: true
+  suppressionsFile:
+    description: 'Local .xml file to list vulnerabilities to be ignored/suppressed'
+    required: false
+runs:
+  using: "composite"
+  steps:
+      # Caching downloaded vulnerabilities db so that we don't constantly download them
+      - name: "Cache NVD database"
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-owasp-${{ hashFiles('**/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-owasp-
+
+      - name: "Run OWASP dependency check"
+        shell: bash
+        env:
+          SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SLACK_WEBHOOK_URL }}
+          NVD_API_KEY: ${{ fromJSON(inputs.secrets).NVD_API_KEY }}
+        run: |
+          set -eu ;
+          ./gradlew dependencyCheckAnalyze --info \
+            -PnvdApiKey="$NVD_API_KEY" \
+            -PslackWebhookUrl="SLACK_WEBHOOK_URL" \
+            -PsuppressionsFile=${{ inputs.suppressionsFile }}
+        continue-on-error: true
+
+      - name: Upload vulnerability scan report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vulnerability-reports
+          retention-days: 1
+          path: |
+            service/build/reports/dependency-check-report.html
