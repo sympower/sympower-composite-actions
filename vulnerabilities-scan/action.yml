@@ -22,13 +22,13 @@ runs:
       - name: "Run OWASP dependency check"
         shell: bash
         env:
-          SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SLACK_WEBHOOK_URL }}
+          SECURITY_SCAN_SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SECURITY_SCAN_SLACK_WEBHOOK_URL }}
           NVD_API_KEY: ${{ fromJSON(inputs.secrets).NVD_API_KEY }}
         run: |
           set -eu ;
           ./gradlew dependencyCheckAnalyze --info \
             -PnvdApiKey="$NVD_API_KEY" \
-            -PslackWebhookUrl="SLACK_WEBHOOK_URL" \
+            -PslackWebhookUrl="$SECURITY_SCAN_SLACK_WEBHOOK_URL" \
             -PsuppressionsFile=${{ inputs.suppressionsFile }}
         continue-on-error: true
 
