@@ -361,9 +361,6 @@ The first ever run will be slow, as the task will download a database with known
 **Required** inputs for this GitHub actions:
 * `secrets` - JSON string of the GitHub secrets.
 
-**Optional** inputs for this GitHub actions:
-* `suppressionsFile` - Local .xml file to list vulnerabilities to be ignored/suppressed.
-
 Example of usage:
 ```yaml
 jobs:

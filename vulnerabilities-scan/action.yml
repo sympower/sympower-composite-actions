@@ -4,9 +4,6 @@ inputs:
   secrets:
     description: 'Secrets required for the build'
     required: true
-  suppressionsFile:
-    description: 'Local .xml file to list vulnerabilities to be ignored/suppressed'
-    required: false
 runs:
   using: "composite"
   steps:
@@ -28,8 +25,7 @@ runs:
           set -eu ;
           ./gradlew dependencyCheckAnalyze --info \
             -PnvdApiKey="$NVD_API_KEY" \
-            -PslackWebhookUrl="$SECURITY_SCAN_SLACK_WEBHOOK_URL" \
-            -PsuppressionsFile=${{ inputs.suppressionsFile }}
+            -PslackWebhookUrl="$SECURITY_SCAN_SLACK_WEBHOOK_URL"
         continue-on-error: true
 
       - name: Upload vulnerability scan report
