@@ -25,7 +25,7 @@ runs:
           set -eu ;
           ./gradlew dependencyCheckAnalyze --info \
             -PnvdApiKey="$NVD_API_KEY" \
-            -PslackWebhookUrl="$SECURITY_SCAN_SLACK_WEBHOOK_URL" \
+            -PslackWebhookUrl="$SECURITY_SCAN_SLACK_WEBHOOK_URL"
         continue-on-error: true
 
       - name: Upload vulnerability scan report
