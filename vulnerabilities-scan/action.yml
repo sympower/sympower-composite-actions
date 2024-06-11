@@ -16,8 +16,7 @@ runs:
           restore-keys: |
             ${{ runner.os }}-owasp-
 
-      - id: owasp-dependency-check
-        name: "Run OWASP dependency check"
+      - name: "Run OWASP dependency check"
         shell: bash
         env:
           NVD_API_KEY: ${{ fromJSON(inputs.secrets).NVD_API_KEY }}
@@ -25,10 +24,9 @@ runs:
           set -eu ;
           ./gradlew dependencyCheckAnalyze --info \
             -PnvdApiKey="$NVD_API_KEY"
-        continue-on-error: true
 
       - name: Slack notify for vulnerabilities
-        if: steps.owasp-dependency-check.outcome != 'success'
+        if: failure()
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
