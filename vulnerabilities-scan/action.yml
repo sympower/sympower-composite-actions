@@ -19,7 +19,6 @@ runs:
       - name: "Run OWASP dependency check"
         shell: bash
         env:
-          SECURITY_SCAN_SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SECURITY_SCAN_SLACK_WEBHOOK_URL }}
           NVD_API_KEY: ${{ fromJSON(inputs.secrets).NVD_API_KEY }}
         run: |
           set -eu ;
@@ -44,7 +43,7 @@ runs:
               ]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SECURITY_SCAN_SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SECURITY_SCAN_SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Upload vulnerability scan report
