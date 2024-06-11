@@ -19,14 +19,32 @@ runs:
       - name: "Run OWASP dependency check"
         shell: bash
         env:
-          SECURITY_SCAN_SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SECURITY_SCAN_SLACK_WEBHOOK_URL }}
           NVD_API_KEY: ${{ fromJSON(inputs.secrets).NVD_API_KEY }}
         run: |
           set -eu ;
           ./gradlew dependencyCheckAnalyze --info \
-            -PnvdApiKey="$NVD_API_KEY" \
-            -PslackWebhookUrl="$SECURITY_SCAN_SLACK_WEBHOOK_URL"
+            -PnvdApiKey="$NVD_API_KEY"
         continue-on-error: true
+
+      - name: Slack notify for vulnerabilities
+        if: failure()
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "attachments": [
+                {
+                  "mrkdwn_in": ["text"],
+                  "pretext": "Security issues found in *${{ github.repository }}*",
+                  "color": "ff0000",
+                  "title": "Dependency-Analyze Failure:",
+                  "text": "One or more dependencies were identified with vulnerabilities that have a CVSS score greater than '8.0'. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|See the dependency-check report for more details>."
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SECURITY_SCAN_SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Upload vulnerability scan report
         if: always()
