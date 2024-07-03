@@ -55,7 +55,7 @@ runs:
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Upload vulnerability scan report
-        if: env.vulnerabilities_found == 'true'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: vulnerability-reports
