@@ -27,6 +27,7 @@ runs:
 
       - name: Check for specific error in output
         id: check-error
+        shell: bash
         run: |
           if grep -q "One or more dependencies were identified with vulnerabilities" output.txt; then
             echo "vulnerabilities_found=true" >> $GITHUB_ENV
