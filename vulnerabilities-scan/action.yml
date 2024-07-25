@@ -23,10 +23,11 @@ runs:
         run: |
           set -eu ;
           ./gradlew dependencyCheckAnalyze --info \
-            -PnvdApiKey="$NVD_API_KEY" | tee output.txt
+            -PnvdApiKey="$NVD_API_KEY" 2>&1 | tee output.txt
 
-      - name: Check for specific error in output
+      - name: "Check for specific error in output"
         id: check-error
+        if: failure()
         shell: bash
         run: |
           if grep -q "One or more dependencies were identified with vulnerabilities" output.txt; then
@@ -35,8 +36,8 @@ runs:
             echo "vulnerabilities_found=false" >> $GITHUB_ENV
           fi
           
-      - name: Slack notify for vulnerabilities
-        if: env.vulnerabilities_found == 'true'
+      - name: "Slack notify for vulnerabilities"
+        if: failure() && env.vulnerabilities_found == 'true'
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
@@ -55,7 +56,7 @@ runs:
           SLACK_WEBHOOK_URL: ${{ fromJSON(inputs.secrets).SECURITY_SCAN_SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
-      - name: Upload vulnerability scan report
+      - name: "Upload vulnerability scan report"
         if: always()
         uses: actions/upload-artifact@v4
         with:
