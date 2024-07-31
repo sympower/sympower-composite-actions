@@ -1,0 +1,42 @@
+name: 'Upload OpenAPI Schema'
+description: 'If there are changes to the openapi schema, upload it to Nexus'
+inputs:
+  version:
+    description: 'Version of the artifact to be published'
+    required: true
+  secrets:
+    description: 'Secrets required for the build'
+    required: true
+  openapi-dir:
+    description: 'Repo directory ťo check for openapi file changes'
+    default: 'openapi'
+runs:
+  using: "composite"
+  steps:
+    - name: "Check if openapi specs exists"
+      shell: bash
+      run: |
+        if [ -d "${{ inputs.openapi-dir }}" ]; then
+          echo "HAS_SCHEMA=true" >> $GITHUB_ENV ;
+        else
+          echo "HAS_SCHEMA=false" >> $GITHUB_ENV ;
+        fi
+
+    - name: "Check for changes in openapi specs"
+      if: env.HAS_SCHEMA == 'true'
+      id: openapi-files
+      uses: tj-actions/changed-files@v43
+      with:
+        since_last_remote_commit: "true"
+        files: ${{ inputs.openapi-dir }}/**
+
+    - name: Upload openapi specs
+      shell: bash
+      if:
+        env.HAS_SCHEMA == 'true'
+        && steps.openapi-files.outputs.any_modified == 'true'
+      run: |
+        set -eu
+        
+        ./gradlew publishOpenApiSchemas --parallel --continue --stacktrace \
+          -Ptag=${{ inputs.version }}
