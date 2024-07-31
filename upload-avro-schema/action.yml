@@ -1,5 +1,5 @@
-name: 'Upload Schema'
-description: 'If there are changes to schema, upload it to Nexus'
+name: 'Upload Avro Schema'
+description: 'If there are changes to the avro schema, upload it to Nexus'
 inputs:
   version:
     description: 'Version of the artifact to be published'
@@ -16,7 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check if schema exists
+    - name: Check if avro schema exists
       shell: bash
       run: |
         if [ -d "${{ inputs.schema-module }}" ]; then
@@ -25,7 +25,7 @@ runs:
           echo "HAS_SCHEMA=false" >> $GITHUB_ENV ;
         fi
 
-    - name: Check for changes in schema
+    - name: Check for changes in avro schema
       if: env.HAS_SCHEMA == 'true'
       id: schema-files
       uses: tj-actions/changed-files@v43
