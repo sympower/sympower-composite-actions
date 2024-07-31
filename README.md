@@ -151,9 +151,9 @@ jobs:
           version: ${{ steps.format-version.outputs.version }}
 ```
 
-### upload-schema
+### upload-avro-schema
 
-`upload-schema` action detects if there are any file changes in the schema module. Directory named `schema` is checked
+`upload-avro-schema` action detects if there are any file changes in the schema module. Directory named `schema` is checked
 by default, however this can be overridden by providing a different directory name as `schema-module` input for this
 action. If changes are detected then runs Gradle publish command to ensure schema artifact is published to Nexus and
 schema version badge gist is updated. 
@@ -186,11 +186,51 @@ jobs:
           style-as-release: true
       - id: upload-schema
         name: "Upload schema"
-        uses: sympower/sympower-composite-actions/upload-schema@{LATEST_VERSION}
+        uses: sympower/sympower-composite-actions/upload-avro-schema@{LATEST_VERSION}
         with:
           version: ${{ steps.format-version.outputs.version }}
           secrets: ${{ env.secrets }}
           gistID: {some-valid-gist-id}
+```
+
+
+### upload-openapi-schema
+
+`upload-openapi-schema` action detects if there are any file changes in the `openapi` directory. Directory named `openapi` is checked
+by default, however this can be overridden by providing a different directory name as `openapi-dir` input for this
+action. If changes are detected then runs Gradle publish command to ensure schema artifact is published to Nexus.
+
+`format-version` action can be used to format the repo version for this action, but it is not required as you can choose
+to use any version you want as the input.
+
+Required inputs for this GitHub actions:
+* `version` - Version of the artifact to be published.
+* `secrets` - JSON string of the GitHub secrets.
+
+Example of usage:
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      secrets: ${{ toJSON(secrets) }}
+    steps:
+      - id: setup-build-environment
+        name: "Setup build environment"
+        uses: sympower/sympower-composite-actions/setup-build-environment@{LATEST_VERSION}
+        with:
+          secrets: ${{ env.secrets }}
+      - id: format-version
+        name: "Format version"
+        uses: sympower/sympower-composite-actions/format-version@{LATEST_VERSION}
+        with:
+          style-as-release: true
+      - id: upload-schema
+        name: "Upload OpenAPI schema"
+        uses: sympower/sympower-composite-actions/upload-openapi-schema@{LATEST_VERSION}
+        with:
+          version: ${{ steps.format-version.outputs.version }}
+          secrets: ${{ env.secrets }}
 ```
 
 ### upload-pacts
