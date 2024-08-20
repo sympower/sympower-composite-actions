@@ -16,7 +16,7 @@ runs:
     - name: "Check if openapi specs exists"
       shell: bash
       run: |
-        if [ -d "${{ inputs.openapi-dir }}" ]; then
+        if find . -type d -name "${{ inputs.openapi-dir }}" -print -quit; then
           echo "HAS_SCHEMA=true" >> $GITHUB_ENV ;
         else
           echo "HAS_SCHEMA=false" >> $GITHUB_ENV ;
