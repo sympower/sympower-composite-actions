@@ -28,7 +28,7 @@ runs:
       uses: tj-actions/changed-files@v44
       with:
         since_last_remote_commit: "true"
-        files: ${{ inputs.openapi-dir }}/**
+        files: '**/${{ inputs.openapi-dir }}/**'
 
     - name: Upload openapi specs
       shell: bash
