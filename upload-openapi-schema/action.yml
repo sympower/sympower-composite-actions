@@ -25,7 +25,7 @@ runs:
     - name: "Check for changes in openapi specs"
       if: env.HAS_SCHEMA == 'true'
       id: openapi-files
-      uses: tj-actions/changed-files@v44
+      uses: tj-actions/changed-files@v45
       with:
         since_last_remote_commit: "true"
         files: '**/${{ inputs.openapi-dir }}/**'
