@@ -38,7 +38,7 @@ runs:
           
       - name: "Slack notify for vulnerabilities"
         if: failure() && env.vulnerabilities_found == 'true'
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
             {
