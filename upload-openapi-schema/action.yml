@@ -34,8 +34,7 @@ runs:
       shell: bash
       if:
         env.HAS_SCHEMA == 'true'
-        # Temp always upload until initial schema versions have been published
-        # && steps.openapi-files.outputs.any_modified == 'true'
+        && steps.openapi-files.outputs.any_modified == 'true'
       run: |
         set -eu
         
