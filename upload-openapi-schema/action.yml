@@ -4,6 +4,9 @@ inputs:
   version:
     description: 'Version of the artifact to be published'
     required: true
+  gistID:
+    description: 'ID of the gist with the version badge to update'
+    required: true
   secrets:
     description: 'Secrets required for the build'
     required: true
@@ -34,9 +37,29 @@ runs:
       shell: bash
       if:
         env.HAS_SCHEMA == 'true'
-        && steps.openapi-files.outputs.any_modified == 'true'
+#      Temporary disable, otherwise we might wait for a long time for the badge to be updated
+#      since the openapi specs are not updated very frequently
+#        && steps.openapi-files.outputs.any_modified == 'true'
       run: |
         set -eu
         
         ./gradlew publishOpenApiSchemas --parallel --continue --stacktrace \
           -Ptag=${{ inputs.version }}
+
+    - run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Update Schema Version Badge
+      if:
+        env.HAS_SCHEMA == 'true'
+#      Temporary disable, otherwise we might wait for a long time for the badge to be updated
+#      since the openapi specs are not updated very frequently
+#        && steps.openapi-files.outputs.any_modified == 'true'
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ fromJSON(inputs.secrets).GIST_SECRET }}
+        gistID: ${{ inputs.gistID }}
+        filename: ${{ env.REPOSITORY_NAME }}-openapi.json
+        label: OpenAPI Specs Version
+        message: ${{ inputs.version }}
+        color: green
