@@ -231,6 +231,7 @@ jobs:
         with:
           version: ${{ steps.format-version.outputs.version }}
           secrets: ${{ env.secrets }}
+          gistID: {some-valid-gist-id}
 ```
 
 ### upload-pacts
