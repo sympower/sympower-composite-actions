@@ -37,9 +37,7 @@ runs:
       shell: bash
       if:
         env.HAS_SCHEMA == 'true'
-#      Temporary disable, otherwise we might wait for a long time for the badge to be updated
-#      since the openapi specs are not updated very frequently
-#        && steps.openapi-files.outputs.any_modified == 'true'
+       && steps.openapi-files.outputs.any_modified == 'true'
       run: |
         set -eu
         
@@ -52,9 +50,7 @@ runs:
     - name: Update Schema Version Badge
       if:
         env.HAS_SCHEMA == 'true'
-#      Temporary disable, otherwise we might wait for a long time for the badge to be updated
-#      since the openapi specs are not updated very frequently
-#        && steps.openapi-files.outputs.any_modified == 'true'
+       && steps.openapi-files.outputs.any_modified == 'true'
       uses: schneegans/dynamic-badges-action@v1.7.0
       with:
         auth: ${{ fromJSON(inputs.secrets).GIST_SECRET }}
