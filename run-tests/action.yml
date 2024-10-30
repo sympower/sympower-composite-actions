@@ -1,11 +1,16 @@
 name: 'Run Tests'
 description: 'Run tests, behaviour tests and integration tests'
+inputs:
+  additional-gradle-args:
+    description: 'Additional arguments to pass to the Gradle commands'
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
     - name: Run unit tests
       shell: bash
-      run: ./gradlew test --parallel --continue --stacktrace
+      run: ./gradlew test --parallel --continue ${{ inputs.additional-gradle-args }}
 
     - name: Check test XML files exist
       id: search-test-results
@@ -30,11 +35,9 @@ runs:
         fail-on-error: false
         output-to: step-summary
 
-
-
     - name: Run behaviour tests
       shell: bash
-      run: ./gradlew behaviourTest --parallel --continue --stacktrace
+      run: ./gradlew behaviourTest --parallel --continue ${{ inputs.additional-gradle-args }}
 
     - name: Check behaviourTest XML files exist
       id: search-behaviourTest-results
@@ -59,10 +62,9 @@ runs:
         fail-on-error: false
         output-to: step-summary
 
-
     - name: Run integration tests
       shell: bash
-      run: ./gradlew integrationTest --parallel --continue --stacktrace
+      run: ./gradlew integrationTest --parallel --continue ${{ inputs.additional-gradle-args }}
 
     - name: Check integrationTest XML files exist
       id: search-integrationTest-results
@@ -89,4 +91,4 @@ runs:
 
     - name: Create test reports
       shell: bash
-      run: ./gradlew testCodeCoverageReport behaviourTestCodeCoverageReport integrationTestCodeCoverageReport jacocoTestReport -x test -x behaviourTest -x integrationTest --parallel --continue --stacktrace
+      run: ./gradlew testCodeCoverageReport behaviourTestCodeCoverageReport integrationTestCodeCoverageReport jacocoTestReport -x test -x behaviourTest -x integrationTest --parallel --continue ${{ inputs.additional-gradle-args }}

@@ -13,6 +13,10 @@ inputs:
   schema-module:
     description: 'Gradle module ťo check for schema file changes'
     default: 'schema'
+  additional-gradle-args:
+    description: 'Additional arguments to pass to the Gradle commands'
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -41,7 +45,7 @@ runs:
       run: |
         set -eu
         
-        ./gradlew publishAvroSchemas --parallel --continue --stacktrace \
+        ./gradlew publishAvroSchemas --parallel --continue ${{ inputs.additional-gradle-args }} \
           -Ptag=${{ inputs.version }}
 
     - run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV

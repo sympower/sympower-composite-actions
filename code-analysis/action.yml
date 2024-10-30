@@ -4,6 +4,10 @@ inputs:
   secrets:
     description: 'Secrets required for the build'
     required: true
+  additional-gradle-args:
+    description: 'Additional arguments to pass to the Gradle commands'
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -14,4 +18,4 @@ runs:
         SONAR_TOKEN: ${{ fromJSON(inputs.secrets).SONAR_TOKEN }}
       run: |
         set -ue ;
-        ./gradlew sonar -x test -x behaviourTest -x integrationTest -x jacocoTestReport --parallel --continue --stacktrace
+        ./gradlew sonar -x test -x behaviourTest -x integrationTest -x jacocoTestReport --parallel --continue ${{ inputs.additional-gradle-args }}
