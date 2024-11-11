@@ -15,8 +15,7 @@ inputs:
     required: true
   require-approval:
     description: 'If set to true then the deployment will require approval before it can be deployed'
-    required: false
-    default: "false"
+    required: true 
 runs:
   using: "composite"
   steps:
