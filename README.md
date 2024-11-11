@@ -329,6 +329,7 @@ Required inputs for this GitHub actions:
 * `fallback-name` **optional** - Fallback name to use for `component` and `service` fields in `auto-deploy` JSON files if either of 
   those are missing. If not declared then repository name is used as the fallback name.
 * `deploy-group` - Deployment group name to use when calling deployment to choose which.
+* `require-approval` - If set to `true` then the deployment will require approval before it can be deployed, otherwise would be deployed without user interaction.
 
 Example of usage:
 ```yaml
@@ -360,6 +361,7 @@ jobs:
           secrets: ${{ env.secrets }}
           version: ${{ steps.format-version.outputs.version }}
           deploy-group: platform
+          require-approval: true
 ```
 
 ### upload-build-artifacts
