@@ -394,38 +394,6 @@ jobs:
         uses: sympower/sympower-composite-actions/upload-build-artifacts@{LATEST_VERSION}
 ```
 
-### vulnerabilities-scan
-
-`vulnerabilities-scan` action runs the OWASP dependency check Gradle task. A report artifact is uploaded and can be found in the respective workflow summary page. 
-The first ever run will be slow, as the task will download a database with known vulnerabilities. 
-
-**Required** inputs for this GitHub actions:
-* `secrets` - JSON string of the GitHub secrets.
-
-Example of usage:
-```yaml
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      secrets: ${{ toJSON(secrets) }}
-    steps:
-      - id: setup-build-environment
-        name: "Setup build environment"
-        uses: sympower/sympower-composite-actions/setup-build-environment@{LATEST_VERSION}
-        with:
-          secrets: ${{ env.secrets }}
-      - id: run-tests
-        name: "Run tests"
-        uses: sympower/sympower-composite-actions/run-tests@{LATEST_VERSION}
-        # ...
-      - id: vulnerability-analysis
-        name: "Vulnerability analysis"
-        uses: sympower/sympower-composite-actions/vulnerabilities-scan@{LATEST_VERSION}
-        with:
-          secrets: ${{ env.secrets }}
-```
-
 ## Releasing new actions
 
 Merging your changes to main will automatically create a new release and tag. Renovate is able to pick this up for most
