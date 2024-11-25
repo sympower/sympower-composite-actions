@@ -19,7 +19,7 @@ runs:
         
         IS_RELEASE_STYLE='${{ inputs.style-as-release }}'
         
-        dateVersion=currentDate=$(date +"%Y.%m.%d.%H.%M") ;
+        dateVersion=$(date +"%Y.%m.%d.%H.%M") ;
         if [ "$IS_RELEASE_STYLE" = "true" ] ; then
           tag="${dateVersion}" ;
           echo "version=$(echo $currentDate-$tag)" >> $GITHUB_OUTPUT ;
