@@ -19,12 +19,12 @@ runs:
         
         IS_RELEASE_STYLE='${{ inputs.style-as-release }}'
         
+        dateVersion=$(date +"%Y.%m.%d.%H.%M") ;
         if [ "$IS_RELEASE_STYLE" = "true" ] ; then
-          currentDate=$(date +"%Y.%m.%d.%H.%M") ;
-          tag=$(echo $GITHUB_SHA | cut -c 1-7) ;
+          tag="${dateVersion}" ;
           echo "version=$(echo $currentDate-$tag)" >> $GITHUB_OUTPUT ;
         else
           REF_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}
-          tag=$(echo ${REF_NAME} | cut -c 1-20 | tr / -)-SNAPSHOT ;
+          tag=$(echo ${REF_NAME} | cut -c 1-20 | tr / -)-SNAPSHOT-${dateVersion} ;
           echo "version=$(echo $tag)" >> $GITHUB_OUTPUT ;
         fi
