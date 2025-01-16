@@ -5,6 +5,14 @@ inputs:
     description: 'Additional arguments to pass to the Gradle commands'
     required: false
     default: ""
+  skip-behaviour-tests:
+    description: 'Skip running behaviour tests'
+    required: false
+    default: "false"
+  skip-integration-tests:
+    description: 'Skip running integration tests'
+    required: false
+    default: "false"
 runs:
   using: "composite"
   steps:
@@ -36,6 +44,7 @@ runs:
         output-to: step-summary
 
     - name: Run behaviour tests
+      if: inputs.skip-behaviour-tests == 'false'
       shell: bash
       run: ./gradlew behaviourTest --parallel --continue ${{ inputs.additional-gradle-args }}
 
@@ -63,6 +72,7 @@ runs:
         output-to: step-summary
 
     - name: Run integration tests
+      if: inputs.skip-integration-tests == 'false'
       shell: bash
       run: ./gradlew integrationTest --parallel --continue ${{ inputs.additional-gradle-args }}
 
