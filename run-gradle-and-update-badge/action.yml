@@ -1,0 +1,84 @@
+name: 'Run Gradle and update badge'
+description: 'If there are changes to a specific directory, run Gradle and update badge'
+inputs:
+  version:
+    description: 'Version of the artifact to be published'
+    type: string
+    required: true
+  gistID:
+    description: 'ID of the gist with the version badge to update'
+    type: string
+    required: true
+  badge-filename:
+    description: 'File name of the version badge to update'
+    type: string
+    required: true
+  badge-label:
+    description: 'Label for the version badge'
+    type: string
+    required: true
+  badge-color:
+    description: 'Color for the version badge'
+    type: string
+    required: false
+    default: "green"
+  gradle-task:
+    description: 'Name of the Gradle task to run'
+    type: string
+    required: true
+  secrets:
+    description: 'Secrets required for the build'
+    type: string
+    required: true
+  directory:
+    description: 'Repo directory ťo check for file changes'
+    type: string
+    required: true
+  additional-gradle-args:
+    description: 'Additional arguments to pass to the Gradle commands'
+    type: string
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - name: "Check if directory exists"
+      shell: bash
+      run: |
+        if find . -type d -name "${{ inputs.directory }}" -print -quit; then
+          echo "HAS_DIRECTORY=true" >> $GITHUB_ENV ;
+        else
+          echo "HAS_DIRECTORY=false" >> $GITHUB_ENV ;
+        fi
+
+    - name: "Check for changes"
+      if: env.HAS_DIRECTORY == 'true'
+      id: changed-files
+      uses: tj-actions/changed-files@v45
+      with:
+        since_last_remote_commit: "true"
+        files: '**/${{ inputs.directory }}/**'
+
+    - name: Run Gradle
+      shell: bash
+      if:
+        env.HAS_DIRECTORY == 'true'
+       && steps.changed-files.outputs.any_modified == 'true'
+      run: |
+        set -eu
+        
+        ./gradlew ${{ inputs.gradle-task }} --parallel --continue ${{ inputs.additional-gradle-args }} \
+          -Ptag=${{ inputs.version }}
+
+    - name: Update Schema Version Badge
+      if:
+        env.HAS_DIRECTORY == 'true'
+       && steps.changed-files.outputs.any_modified == 'true'
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ fromJSON(inputs.secrets).GIST_SECRET }}
+        gistID: ${{ inputs.gistID }}
+        filename: ${{ inputs.badge-filename }}
+        label: ${{ inputs.badge-label }}
+        message: ${{ inputs.version }}
+        color: ${{ inputs.badge-color }}
